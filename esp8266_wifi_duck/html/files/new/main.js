@@ -252,7 +252,11 @@ var version = "9.0",
 			}
 			if(res.autoExec) setChecked("autoExec");
 			switchEXEC()
+			setTimeout(function(){document.getElementsByTagName("main")[0].classList.remove("fade-in")}, 10);
+			setTimeout(function(){document.getElementsByTagName("body")[0].classList.add("animation")}, 1000);
 		});
+		setTimeout(function(){document.getElementsByTagName("main")[0].classList.remove("fade-in")}, 6000);
+		setTimeout(function(){document.getElementsByTagName("body")[0].classList.add("animation")}, 7000);
 	}
 	
 	function restart(){
@@ -534,8 +538,6 @@ var version = "9.0",
 	switchPage(false);
 	loadlist();
 	loadSettings();
-	setTimeout(function(){document.getElementsByTagName("main")[0].classList.remove("fade-in")}, 10);
-	setTimeout(function(){document.getElementsByTagName("body")[0].classList.add("animation")}, 1000);
 
 	// Windows URL listener (Eg. History back + forward keys)
 
