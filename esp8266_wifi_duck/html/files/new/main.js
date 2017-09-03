@@ -256,8 +256,9 @@ var version = "9.0",
 	}
 	
 	function restart(){
+		indicate(6)
 		getResponse("restart",function(responseText){},function(){
-			document.getElementById("error").innerHTML = "device is restarting";
+			setTimeout(function(){indicate("true")},400);
 		},1000);
 		
 	}

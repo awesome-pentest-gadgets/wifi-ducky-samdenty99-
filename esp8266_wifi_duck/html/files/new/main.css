@@ -1111,7 +1111,17 @@ page.active {
 .highlight .form-group textarea {
 	position: sticky;
 	z-index: 0;
-	overflow-x: hidden
+	overflow-x: hidden;
+	color: rgba(0, 0, 0, 0.0001) !important;
+	caret-color: #E65100;
+}
+.highlight .form-group ::-moz-selection {
+	background: #FF9632;
+	color: #000000
+}
+.highlight .form-group ::selection {
+	background: #FF9632;
+	color: #000000
 }
 .form-group .control-label {
 	font-size: 1rem;
@@ -1153,9 +1163,6 @@ pre, .form-group textarea {
 	background: none;
 	box-shadow: none;
 }
-.highlight .form-group textarea {
-	color: rgba(0, 0, 0, .2) !important
-}
 .form-group textarea, pre * {
 	font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, sans-serif !important
 }
@@ -1170,23 +1177,25 @@ pre {
 	pointer-events: none
 }
 .key {
-	font-weight: bold;
-	color: #8e2f00;
-	background: #f37632;
-	border-radius: 4px;
+    font-weight: bold;
+    color: rgba(255,255,255,0.9);
+    background: #E65100;
+    border-radius: 4px;
+    font-size: .8rem;
+    padding: 0.1rem 0.19rem
 }
 .keyword {
 	font-weight: bold;
-	color: #ff5a00
+	color: #E65100
 }
 .string {
-	color: #ff8848
+	color: #ff5a00
 }
 .string:before {
 	font-weight: bold;
 	position: absolute;
 	content: 'STRING';
-	color: #ff5a00
+	color: #E65100
 }
 .number {
 	color: #07c5da
