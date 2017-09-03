@@ -364,11 +364,46 @@ var version = "9.0",
 			api.output = output;
 			api.update = function(){
 				var input = textarea.value;
+				var position = textarea.selectionStart;
 				if(input.match(/^\S+/gm)){
 					input = input.replace(/^\S+/gm,function(letter){return letter.toUpperCase()});
 				}
+				if (input.match(/(^|,)REPEAT/gm)) {
+					input = input.replace(/(^|,)REPEAT/gm, "REPLAY");
+				}
+				if (input.match(/(^|,)WINDOWS/gm)) {
+					input = input.replace(/(^|,)WINDOWS/gm, "GUI");
+					position = position - 4;
+				}
+				if (input.match(/(^|,)RETURN/gm)) {
+					input = input.replace(/(^|,)RETURN/gm, "ENTER");
+					position = position - 1;
+				}
+				if (input.match(/(^|,)1/gm)) {
+					input = input.replace(/(^|,)1/gm, "STRING ");
+					position = position + 6;
+				}
+				if (input.match(/(^|,)2/gm)) {
+					input = input.replace(/(^|,)2/gm, "DELAY ");
+					position = position + 5;
+				}
+				if (input.match(/(^|,)3/gm)) {
+					input = input.replace(/(^|,)3/gm, "REPLAY ");
+					position = position + 6;
+				}
+				if (input.match(/(^|,)4/gm)) {
+					input = input.replace(/(^|,)4/gm, "GUI ");
+					position = position + 3;
+				}
+				if (input.match(/(^|,)5/gm)) {
+					input = input.replace(/(^|,)5/gm, "REM ");
+					position = position + 3;
+				}
+				if (input.match(/(^|,)6/gm)) {
+					input = input.replace(/(^|,)6/gm, "TAB ");
+					position = position + 3;
+				}
 				// Capture cursor position (prevents the cursor from jumping to end after every key press)
-				var position = textarea.selectionStart;
 				textarea.value = input;
 				textarea.selectionEnd = position;
 				if( input ){
