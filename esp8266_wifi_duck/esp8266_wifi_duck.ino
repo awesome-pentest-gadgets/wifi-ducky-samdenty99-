@@ -29,13 +29,7 @@ bool shouldReboot = false;
 extern const uint8_t data_indexHTML[] PROGMEM;
 extern const uint8_t data_updateHTML[] PROGMEM;
 extern const uint8_t data_error404[] PROGMEM;
-extern const uint8_t data_styleCSS[] PROGMEM;
-extern const uint8_t data_functionsJS[] PROGMEM;
-extern const uint8_t data_liveHTML[] PROGMEM;
-extern const uint8_t data_infoHTML[] PROGMEM;
-extern const uint8_t data_nomalizeCSS[] PROGMEM;
-extern const uint8_t data_skeletonCSS[] PROGMEM;
-extern const uint8_t data_license[] PROGMEM;
+extern const uint8_t data_mainCSS[] PROGMEM;
 extern const uint8_t data_settingsHTML[] PROGMEM;
 extern const uint8_t data_viewHTML[] PROGMEM;
 
@@ -80,11 +74,6 @@ void sendToIndex(AsyncWebServerRequest *request){
   request->send(response);
 }
 
-void sendSettings(AsyncWebServerRequest *request) {
-	AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", data_settingsHTML, sizeof(data_settingsHTML));
-	request->send(response);
-}
-
 void setup() {
   
   Serial.begin(BAUD_RATE);
@@ -116,51 +105,22 @@ void setup() {
   });
   server.on("/index.html", HTTP_GET, sendToIndex);
 
-  server.on("/live.html", HTTP_GET, [](AsyncWebServerRequest *request) {
-	  AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", data_liveHTML, sizeof(data_liveHTML));
-	  request->send(response);
-  });
-
   server.on("/view.html", HTTP_GET, [](AsyncWebServerRequest *request) {
 	  AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", data_viewHTML, sizeof(data_viewHTML));
 	  request->send(response);
   });
 
-  server.on("license", HTTP_GET, [](AsyncWebServerRequest *request) {
-	  AsyncWebServerResponse *response = request->beginResponse_P(200, "text/plain", data_license, sizeof(data_license));
+  server.on("/main.css", HTTP_GET, [](AsyncWebServerRequest *request) {
+	  AsyncWebServerResponse *response = request->beginResponse_P(200, "text/css", data_mainCSS, sizeof(data_mainCSS));
 	  request->send(response);
   });
 
-  server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request) {
-	  AsyncWebServerResponse *response = request->beginResponse_P(200, "text/css", data_styleCSS, sizeof(data_styleCSS));
-	  request->send(response);
+  server.on("/main.js", HTTP_GET, [](AsyncWebServerRequest *request) {
+    AsyncWebServerResponse *response = request->beginResponse_P(200, "text/javascript", data_mainJS, sizeof(data_mainJS));
+    request->send(response);
   });
-
-  server.on("/normalize.css", HTTP_GET, [](AsyncWebServerRequest *request) {
-	  AsyncWebServerResponse *response = request->beginResponse_P(200, "text/css", data_nomalizeCSS, sizeof(data_nomalizeCSS));
-	  request->send(response);
-  });
-
-  server.on("/skeleton.css", HTTP_GET, [](AsyncWebServerRequest *request) {
-	  AsyncWebServerResponse *response = request->beginResponse_P(200, "text/css", data_skeletonCSS, sizeof(data_skeletonCSS));
-	  request->send(response);
-  });
-
-  server.on("/functions.js", HTTP_GET, [](AsyncWebServerRequest *request) {
-	  AsyncWebServerResponse *response = request->beginResponse_P(200, "text/javascript", data_functionsJS, sizeof(data_functionsJS));
-	  request->send(response);
-  });
-
-  server.on("/info.html", HTTP_GET, [](AsyncWebServerRequest *request) {
-	  AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", data_infoHTML, sizeof(data_infoHTML));
-	  request->send(response);
-  });
-
-  server.on("/settings.html", HTTP_GET, [](AsyncWebServerRequest *request) {
-	  sendSettings(request);
-  });
-
-  server.on("/settings.html", HTTP_POST, [](AsyncWebServerRequest *request) {
+  
+  server.on("/settings/save", HTTP_POST, [](AsyncWebServerRequest *request) {
 
 	  if(request->hasArg("ssid")) {
 		  String _ssid = request->arg("ssid");
@@ -182,14 +142,14 @@ void setup() {
 	  }
 	  if(request->hasArg("ch")) settings.channel = request->arg("ch").toInt();
 	  if(request->hasArg("hidden")) settings.hidden = true;
-	  else settings.hidden = false;
+    if(request->hasArg("syntax")) settings.syntax = true;
+	  else settings.syntax = false;
 	  if(request->hasArg("autoExec")) settings.autoExec = true;
 	  else settings.autoExec = false;
 	  
 	  settings.save();
 	  if(debug) settings.print();
-
-	  sendSettings(request);
+    request->send(200, "text/plain", "true");
   });
 
   server.on("/settings.json", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -198,6 +158,7 @@ void setup() {
 	  output += "\"password\":\"" + (String)settings.password + "\",";
 	  output += "\"channel\":" + String((int)settings.channel) + ",";
 	  output += "\"hidden\":" + String((int)settings.hidden) + ",";
+    output += "\"syntax\":" + String((int)settings.syntax) + ",";
 	  output += "\"autoExec\":" + String((int)settings.autoExec) + ",";
 	  output += "\"autostart\":\"" + (String)settings.autostart + "\"";
 	  output += "}";

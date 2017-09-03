@@ -27,6 +27,7 @@ void Settings::load() {
 		Settings::reset();
 		return;
 	}
+  syntax = EEPROM.read(syntaxAdr);
 	hidden = (bool)EEPROM.read(hiddenAdr);
 	autoExec = (bool)EEPROM.read(autoExecAdr);
 	
@@ -53,6 +54,7 @@ void Settings::save() {
 	EEPROM.write(channelAdr, channel);
 	EEPROM.write(hiddenAdr, hidden);
 	EEPROM.write(autoExecAdr, autoExec);
+  EEPROM.write(syntaxAdr, syntax);
 
 	EEPROM.commit();
 }
@@ -75,16 +77,18 @@ void Settings::reset() {
 	channel = 1;
 	hidden = false;
 	autoExec = false;
+  syntax = true;
 
 	save();
 }
 
 void Settings::print() {
 	Serial.println("\nSettings:");
-	Serial.println("SSID = "+(String)ssid);
-	Serial.println("Password = " + (String)password);
-	Serial.println("Channel = " + (String)channel);
-	Serial.println("Hidden SSID = " + (String)hidden);
+	Serial.println("SSID          = "+(String)ssid);
+	Serial.println("Password      = " + (String)password);
+	Serial.println("Channel       = " + (String)channel);
+	Serial.println("Hidden SSID   = " + (String)hidden);
+  Serial.println("Syntax highl. = " + (String)syntax);
 	Serial.println("auto. Execute = " + (String)autoExec);
-	Serial.println("Autoscript = '" + (String)autostart + "'");
+	Serial.println("Autoscript    = '" + (String)autostart + "'");
 }

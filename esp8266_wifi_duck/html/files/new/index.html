@@ -1,0 +1,329 @@
+<!Doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="main.css">
+	<meta charset="utf-8">
+	<title>Wi-Fi Ducky</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+	<meta name="theme-color" content="#E65100">
+	<link type="image/x-icon" rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAYFBMVEUAAADUUAq1OwD8WgPcSgHnXBL+aResOgDlVQLqWAnnSgDnUQL1VQHtUQD26uT03tHmQQD39fT049r3+/z02cnoZR3yx7DwvqLxt5jvqoTrjFjqfkXqbivuoXjtmGjkNgD4AunmAAAACXRSTlMAIQvdgXHXL9SufvGsAAAAlElEQVQY002O2RbCIAxEWVorA2HrXqv+/1+aRo7H+8ZlJolqaK3+6J3Qq8bNNezvDe8A5/y95XHEsrP0/mpxdF7OaZzBgkScsbxSmeFFaG64LdY1vzM8aRF5qSlN++HAwrB4jGlKtRQPMkqFS9TE4pkp8NAuAGtkNiB0irGEzBuQM31PNTYQGArWKEZaguQbZhja7weHwgjCbfKL4QAAAABJRU5ErkJggg==">
+</head>
+
+<body>
+	<nav>
+		<logo>
+			<div id="logo-img">
+				<svg viewBox="0 0 24 24">
+					<path d="M8.5,5A1.5,1.5 0 0,0 7,6.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 10,6.5A1.5,1.5 0 0,0 8.5,5M10,2A5,5 0 0,1 15,7C15,8.7 14.15,10.2 12.86,11.1C14.44,11.25 16.22,11.61 18,12.5C21,14 22,12 22,12C22,12 21,21 15,21H9C9,21 4,21 4,16C4,13 7,12 6,10C2,10 2,6.5 2,6.5C3,7 4.24,7 5,6.65C5.19,4.05 7.36,2 10,2Z" />
+				</svg>
+			</div><b style="color:#fff">Wi-Fi</b> Ducky
+		</logo>
+		<actions>
+			<a onclick="page(0)" id="nav-0">Scripts</a>
+			<a onclick="page(1)" id="nav-1">Live Execute</a>
+			<a onclick="page(2)" id="nav-2">Settings</a>
+			<a onclick="page(3)" id="nav-3">Info</a>
+		</actions>
+	</nav>
+	<div id="notification"></div>
+	<div class="reboot-container">
+		<div class="reboot-btn">
+			<span class="tooltip">Reboot</span>
+			<div class=reboot-inner>
+				<svg onclick="restart()" class=reboot viewBox="0 0 24 24">
+					<path d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"/>
+				</svg>
+			</div>
+		</div>
+		<div class="payload">
+			<div class=reboot-inner>
+				<svg class=reboot viewBox="0 0 24 24" onclick="run()">
+				    <path d="M13,15L15.5,17.5L16.92,16.08L12,11.16L7.08,16.08L8.5,17.5L11,15V21H13V15M3,3H21V5H3V3M3,7H13V9H3V7Z" />
+				</svg>
+			</div>
+			<span class="tooltip">Execute</span>
+		</div>
+	</div>
+	<div id="spinner-container"></div>
+	<main class="fade-in">
+		<container>
+			<page id="0"><!--Default page -->
+				<page-container>
+					<p id="memory">
+						<button class="button-warn" onclick="format()">format</button>
+						<meter id="memoryGraph" value="" max="1" min="0"></meter>
+						<span id="memorySize">0 / 3MB</span>
+					</p>
+					<table id="scriptlist">
+						<tr>
+							<th>Name</th>
+							<th>Size</th>
+							<th>Run</th>
+						</tr>
+					</table>
+					<form action="/upload" method="POST" enctype="multipart/form-data">
+						<input type='file' name='update'>
+						<input type='submit' class="button-primary right" value='upload new script'>
+					</form>
+				</page-container>
+			</page><!--Live execute page  --><page id="1">
+				<page-container>
+					<div class="card-container">
+						<div class="settingsHeader">Ducky Script</div>
+						<div class="card">
+							<div class="card-content">
+								<div class="form-group">
+									<textarea id="scriptTextArea" name="script" maxlength="1024" onkeyup="count()" onkeydown="count()" onchange="count()" required="required" onfocus="document.getElementsByTagName('body')[0].classList.add('hide-nav')" onblur="document.getElementsByTagName('body')[0].classList.remove('hide-nav')" spellcheck="false" autocorrect="off" autocapitalize="off">STRING quack</textarea>
+								</div>
+							</div>
+							<div class="card-action">
+								<button onclick="save()" class="secondary">save script</button>
+								<button onclick="run()" class="right secondary">run script</button>
+							</div>
+						</div>
+					</div>
+					<div class="card-container">
+						<div class="settingsHeader">Command info</div>
+						<div class="card">
+							<table>
+								<tr>
+									<th>Command</th>
+									<th>Info</th>
+								</tr>
+								<tr>
+									<td>STRING</td>
+									<td>Types an ASCII string</td>
+								</tr>
+								<tr>
+									<td>DELAY</td>
+									<td>Time in MS to wait before executing the next command</td>
+								</tr>
+								<tr>
+									<td>DEFAULTDELAY</td>
+									<td>Time in MS to wait before executing every command</td>
+								</tr>
+								<tr>
+									<td>REM</td>
+									<td>Single line comments, no effect</td>
+								</tr>
+
+								<tr>
+									<td>REPLAY</td>
+									<td>Replay previous command a certain amount of times</td>
+								</tr>
+								<tr>
+									<td>ENTER</td>
+									<td>Return key</td>
+								</tr>
+								<tr>
+									<td>GUI</td>
+									<td>Windows or CMD key</td>
+								</tr>
+								<tr>
+									<td>CTRL</td>
+									<td>Control key</td>
+								</tr>
+								<tr>
+									<td>ALT</td>
+									<td>Alternate key</td>
+								</tr>
+								<tr>
+									<td>SHIFT</td>
+									<td>Shift key</td>
+								</tr>
+								<tr>
+									<td>CAPSLOCK</td>
+									<td>Toggle Capslock</td>
+								</tr>
+								<tr>
+									<td>TAB</td>
+									<td>Tabulator key</td>
+								</tr>
+								<tr>
+									<td>SPACE</td>
+									<td>Space key</td>
+								</tr>
+								<tr>
+									<td>UP</td>
+									<td>Up Arrow key</td>
+								</tr>
+								<tr>
+									<td>DOWN</td>
+									<td>Down Arrow key</td>
+								</tr>
+								<tr>
+									<td>LEFT</td>
+									<td>Left Arrow key</td>
+								</tr>
+								<tr>
+									<td>RIGHT</td>
+									<td>Right Arrow key</td>
+								</tr>
+								<tr>
+									<td>DELETE</td>
+									<td>Backspace key</td>
+								</tr>
+								<tr>
+									<td>ESC</td>
+									<td>Escape key</td>
+								</tr>
+								<tr>
+									<td>HOME</td>
+									<td>Home key</td>
+								</tr>
+								<tr>
+									<td>INSERT</td>
+									<td>Insert key</td>
+								<tr>
+									<td>APP</td>
+									<td>App key</td>
+								</tr>
+								<tr>
+									<td>MENU</td>
+									<td>Menu key</td>
+								</tr>
+								<tr>
+									<td>PAGEUP</td>
+									<td>Page up key</td>
+								</tr>
+								<tr>
+									<td>PAGEDOWN</td>
+									<td>Page down key</td>
+								</tr>
+							</table>
+							<div class="card-action">
+								<a href="https://github.com/hak5darren/USB-Rubber-Ducky/wiki/Duckyscript" class="button right" target="blank_">Official documentation</a>
+							</div>
+						</div>
+					</div>
+				</page-container>
+			</page><!--Settings page      --><page id="2">
+				<page-container>
+					<form action="/settings/save" method="POST" target="data-frame" id="settings" >
+						<div class="card-container">
+							<div class="settingsHeader">Wi-Fi</div>
+							<div class="card-small">
+								<div class="row">
+									<div class="col-12">
+										<div class="input-container">
+											<input placeholder=" " id="ssid" type="text" required="" minlength="1" maxlength="32" autocorrect="off" autocapitalize="none" spellcheck="false">
+											<label for="ssid">SSID</label>
+										</div>
+									</div>
+									<div class="col-12">
+										<div class="input-container">
+											<input placeholder=" " id="pswd" type="text" required="" minlength="8" maxlength="32" autocorrect="off" autocapitalize="none" spellcheck="false">
+											<label for="pswd">Password</label>
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="input-container">
+											<input placeholder=" " id="ch" type="number" required="" min="1" max="14">
+											<label for="ch">Channel</label>
+										</div>
+									</div>
+									<div class="col-6">
+										<label for="hidden" class="checkboxContainer invert">
+											<input type="checkbox" name="hidden" id="hidden" value="false">
+											<label class="checkbox" for="hidden"></label>
+											Hide SSID
+										</label>
+									</div>
+								</div>
+							</div>
+						</div><div class="card-container">
+							<div class="settingsHeader">Configuration</div>
+							<div class="card-small">
+								<div class="row">
+									<div class="col-12">
+										<label for="autoExec" class="checkboxContainer">
+											Execute script on startup
+											<input type="checkbox" name="autoExec" id="autoExec" value="false">
+											<label class="checkbox" for="autoExec">
+										</label>
+									</div>
+									<div class="col-12">
+										<div class="input-container" id="execContainer">
+											<input placeholder=" " id="autostart" type="text" required="" minlength="1" maxlength="32">
+											<label for="autostart">Script name</label>
+										</div>
+									</div>
+									<div class="col-12">
+										<label for="syntax" class="checkboxContainer">
+											Script syntax highlighting
+											<input type="checkbox" name="syntax" id="syntax" value="false">
+											<label class="checkbox" for="syntax">
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-container dual">
+							<button type="button" class="button left" onclick="reset()">reset</button>
+							<button type="button" class="button right" onclick="this.form.submit()">save</button>
+						</div>
+					</form>
+				</page-container>
+			</page><!--Info page          --><page id="3">
+				<page-container>
+					<div class="card-container">
+						<div class="settingsHeader">Wi-Fi Ducky</div>
+						<div class="card">
+							<div class="card-content">
+								<br /> This project is licensed under the MIT License - see the <a href="license">license file</a> file for details.
+								<br />
+								<br /> The source code is available on <a href="https://github.com/spacehuhn/wifi_ducky" target="_blank">GitHub</a>.
+								<br />
+								<br />
+								<span class="bold">Sources and Additional Links:</span>
+								<br />
+								<a href="https://github.com/esp8266/Arduino">ESP8266 SDK</a> - licensed under the GNU Lesser General Public License v2.1
+								<br />
+								<a href="https://github.com/me-no-dev/ESPAsyncWebServer">ESPAsyncWebServer</a> - copyright <a href="https://github.com/me-no-dev">Me No Dev</a>
+								<br />
+								<a href="https://github.com/me-no-dev/ESPAsyncTCP">ESPAsyncTCP</a> - licensed under the GNU Lesser General Public License v3.0
+								<br />
+								<a href="https://github.com/hak5darren/USB-Rubber-Ducky/wiki/Duckyscript">Ducky Script</a> - copyright <a href="https://www.hak5.org/">Hak5</a>
+								<br />
+								<a href="https://github.com/Seytonic/Duckduino-microSD">Duckduino</a> Ducky Script interpreter - copyright <a href="https://www.youtube.com/seytonic">Seytonic</a>
+								<br />
+								<a href="http://getskeleton.com/">Skeleton</a> CSS - licensed under the MIT License
+								<br />
+								</p>
+								<hr />
+								<h2>Update</h2>
+								<p class="bold">Select the .bin file and press upload.</p>
+								<form method='POST' action='/update' enctype='multipart/form-data'>
+									<input type='file' name='update'>
+									<input type='submit' class="button-primary right" value='Upload'>
+								</form>
+							</div>
+						</div>
+					</div>
+				</page-container>
+			</page>
+		</container>
+		<iframe name="data-frame" id="data-frame"></iframe>
+	<footer>
+		<div class=footer>
+			<ul>
+				<li>
+					<a href=https://github.com/spacehuhn/wifi_ducky?wi-pwn= target=blank_ style=color:#fff;font-weight:400><b>Wi-Fi Ducky</b> &copy; 2017 Spacehuhn</a>
+				</li>
+				<li>
+					<a href=https://github.com/spacehuhn/wifi_ducky target=blank_>GitHub</a>
+				</li>
+				<li>
+					<a href=https://github.com/spacehuhn/wifi_ducky/wiki target=blank_>Wiki</a>
+				</li>
+			</ul>
+		</div>
+		<a href=https://samdenty99.github.io/about?wifi_ducky target=blank_ class=sub-section-attribution>Designed by Sam Denty - @samdenty99</a>
+	</footer>
+	</main>
+</body>
+<script src="main.js"></script>
+
+</html>

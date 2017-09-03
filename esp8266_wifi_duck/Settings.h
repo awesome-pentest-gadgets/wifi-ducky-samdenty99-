@@ -11,6 +11,7 @@
 #define autoExecAdr 68
 #define autostartLenAdr 69
 #define autostartAdr 70
+#define syntaxAdr 110
 
 #define debug false
 
@@ -33,6 +34,7 @@ public:
 
 	uint8_t channel;
 	uint8_t hidden;
+  uint8_t syntax;
 	uint8_t autoExec;
 	
 };

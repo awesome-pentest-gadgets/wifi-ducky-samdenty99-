@@ -57,6 +57,7 @@ void Press(String b){
   else if (b.equals("SHIFT")) Keyboard.press(KEY_LEFT_SHIFT);
   else if (b.equals("ALT")) Keyboard.press(KEY_LEFT_ALT);
   else if (b.equals("GUI")) Keyboard.press(KEY_LEFT_GUI);
+  else if (b.equals("WINDOWS")) Keyboard.press(KEY_LEFT_GUI);
   else if (b.equals("UP") || b.equals("UPARROW")) Keyboard.press(KEY_UP_ARROW);
   else if (b.equals("DOWN") || b.equals("DOWNARROW")) Keyboard.press(KEY_DOWN_ARROW);
   else if (b.equals("LEFT") || b.equals("LEFTARROW")) Keyboard.press(KEY_LEFT_ARROW);
@@ -92,8 +93,8 @@ void setup() {
   Serial.begin(BAUD_RATE);
   ExternSerial.begin(BAUD_RATE);
 
-  pinMode(13,OUTPUT);
-  digitalWrite(13,HIGH);
+  pinMode(15,OUTPUT);
+  digitalWrite(15,HIGH);
 
   Keyboard.begin();
 }
