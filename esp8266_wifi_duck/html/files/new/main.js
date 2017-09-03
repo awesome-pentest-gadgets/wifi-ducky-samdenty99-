@@ -428,6 +428,11 @@ var version = "9.0",
 					changecursor = true;
 					position = position + 3;
 				}
+				if (input.match(/(^|,)8/gm)) {
+					input = input.replace(/(^|,)8/gm, "GUI R");
+					changecursor = true;
+					position = position + 4;
+				}
 				if (input != oldInput) {
 					// Capture cursor position (prevents the cursor from jumping to end after every key press)
 					textarea.value = input;
