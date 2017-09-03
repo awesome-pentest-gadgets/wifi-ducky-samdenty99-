@@ -368,9 +368,9 @@ var version = "9.0",
 					input = input.replace(/^\S+/gm,function(letter){return letter.toUpperCase()});
 				}
 				// Capture cursor position (prevents the cursor from jumping to end after every key press)
-				var position = input.selectionStart;
+				var position = textarea.selectionStart;
 				textarea.value = input;
-				input.selectionEnd = position;
+				textarea.selectionEnd = position;
 				if( input ){
 					color( input, output, parser );
 					// determine the best size for the textarea
