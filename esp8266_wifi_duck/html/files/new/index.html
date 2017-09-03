@@ -302,7 +302,7 @@
 						</div>
 						<div class="card-container dual">
 							<button type="button" class="button left" onclick="reset()">reset</button>
-							<button type="button" class="button right" onclick="indicate(6);this.form.submit();loadSettings();">save</button>
+							<button type="button" class="button right" onclick="indicate(6);this.form.submit();">save</button>
 						</div>
 					</form>
 				</page-container>
@@ -363,6 +363,6 @@
 		</footer>
 	</main>
 	<script src="main.js"></script>
-	<iframe name="data-frame" id="data-frame" onload="var df=this.contentWindow.document.body.innerHTML;if (df) if(df.includes('true')) {indicate(true)} else {indicate(false)}"></iframe>
+	<iframe name="data-frame" id="data-frame" onload="var df=this.contentWindow.document.body.innerHTML;if (df) if(df.includes('true')) {indicate(true);loadSettings();} else {indicate(false)}"></iframe>
 </body>
 </html>

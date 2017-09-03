@@ -29,6 +29,7 @@ var version = "9.0",
 	};
 
 	function switchPage(animation) {
+		document.body.scrollTop = document.documentElement.scrollTop = 0;
 		var curPage = "default";
 		if (window.location.search) curPage = window.location.search.substr(1);
 		// Convert page name to ID number
@@ -381,6 +382,7 @@ var version = "9.0",
 				}
 				if (input.match(/(^|,)RUN/gm)) {
 					input = input.replace(/(^|,)RUN/gm, "GUI R");
+					changecursor = true;
 					position = position + 2;
 				}
 				if (input.match(/(^|,)SLEEP/gm)) {
