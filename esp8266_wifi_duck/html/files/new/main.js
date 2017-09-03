@@ -367,7 +367,10 @@ var version = "9.0",
 				if(input.match(/^\S+/gm)){
 					input = input.replace(/^\S+/gm,function(letter){return letter.toUpperCase()});
 				}
+				// Capture cursor position (prevents the cursor from jumping to end after every key press)
+				var position = input.selectionStart;
 				textarea.value = input;
+				input.selectionEnd = position;
 				if( input ){
 					color( input, output, parser );
 					// determine the best size for the textarea
@@ -421,7 +424,8 @@ var version = "9.0",
 			comment: /(REM|#)[^\r\n]*/,
 			number: /0x[\dA-Fa-f]+|-?(\d+\.?\d*|\.\d+)/,
 			string: /STRING(.*)/,
-			keyword: /(WINDOWS|DELAY|DEFAULTDELAY|REPLAY|GUI|SHIFT|ALT|CTRL|ENTER|DELETE|ESC|INSERT|SPACE|TAB|DOWN|LEFT|RIGHT|UP|CAPSLOCK|HOME|APP|MENU|PAGEUP|PAGEDOWN)(?!\w|=)/,
+			key: /(WINDOWS|GUI|SHIFT|ALT|CTRL|ENTER|DELETE|ESC|INSERT|SPACE|TAB|DOWN|LEFT|RIGHT|UP|CAPSLOCK|HOME|APP|MENU|PAGEUP|PAGEDOWN)(?!\w|=)/,
+			keyword: /(DELAY|DEFAULTDELAY|REPLAY)(?!\w|=)/,
 			text: /\S+/,
 		});
 		// wait for the page to finish loading before accessing the DOM
