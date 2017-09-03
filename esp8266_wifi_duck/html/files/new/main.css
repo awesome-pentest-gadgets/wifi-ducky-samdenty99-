@@ -1151,7 +1151,7 @@ pre, .form-group textarea {
 	border-width: 0;
 	border-color: transparent;
 	background: none;
-	box-shadow: none
+	box-shadow: none;
 }
 .highlight .form-group textarea {
 	color: rgba(0, 0, 0, .2) !important

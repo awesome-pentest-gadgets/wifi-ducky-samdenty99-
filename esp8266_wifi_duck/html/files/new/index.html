@@ -39,14 +39,16 @@
 		</div>
 		<div class="payload">
 			<div class=reboot-inner>
-				<svg class=reboot viewBox="0 0 24 24" onclick="run()">
+				<svg class=reboot viewBox="0 0 24 24" onclick="liveRun()">
 				    <path d="M13,15L15.5,17.5L16.92,16.08L12,11.16L7.08,16.08L8.5,17.5L11,15V21H13V15M3,3H21V5H3V3M3,7H13V9H3V7Z" />
 				</svg>
 			</div>
 			<span class="tooltip">Execute</span>
 		</div>
 	</div>
-	<div id="spinner-container"></div>
+	<div id="spinner-container">
+		<svg class=spinner viewBox='0 0 66 66'><circle class=path cx=33 cy=33 fill=none r=30 stroke-linecap=round stroke-width=6></circle></svg> <svg class=success-svg viewBox='0 0 1000 1000'><path d=M908.3,132.5L336.7,704.2l-245-245L10,540.8l326.7,326.7l81.7-81.7L990,214.2L908.3,132.5z /></svg> <svg class=failed-svg viewBox='0 0 19 19'><line stroke-width=2 x1=1 x2=18 y1=1 y2=18></line><line stroke-width=2 x1=18 x2=1 y1=1 y2=18></line></svg>
+	</div>
 	<main class="fade-in">
 		<container>
 			<page id="0"><!--Default page -->
@@ -75,12 +77,12 @@
 						<div class="card">
 							<div class="card-content">
 								<div class="form-group">
-									<textarea id="scriptTextArea" name="script" maxlength="1024" onkeyup="count()" onkeydown="count()" onchange="count()" required="required" onfocus="document.getElementsByTagName('body')[0].classList.add('hide-nav')" onblur="document.getElementsByTagName('body')[0].classList.remove('hide-nav')" spellcheck="false" autocorrect="off" autocapitalize="off">STRING quack</textarea>
+									<textarea id="scriptTextArea" name="script" maxlength="1024" onkeyup="count()" onkeydown="count()" onchange="count()" required="required" onfocus="document.getElementsByTagName('body')[0].classList.add('hide-nav')" onblur="document.getElementsByTagName('body')[0].classList.remove('hide-nav')" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="off">STRING quack</textarea>
 								</div>
 							</div>
 							<div class="card-action">
 								<button onclick="save()" class="secondary">save script</button>
-								<button onclick="run()" class="right secondary">run script</button>
+								<button onclick="liveRun()" class="right secondary">run script</button>
 							</div>
 						</div>
 					</div>
@@ -220,11 +222,15 @@
 								</tr>
 								<tr>
 									<td>5</td>
-									<td>REM</td>
+									<td>ENTER</td>
 								</tr>
 								<tr>
 									<td>6</td>
 									<td>TAB</td>
+								</tr>
+								<tr>
+									<td>7</td>
+									<td>REM</td>
 								</tr>
 							</table>
 							<div class="card-action">
@@ -296,7 +302,7 @@
 						</div>
 						<div class="card-container dual">
 							<button type="button" class="button left" onclick="reset()">reset</button>
-							<button type="button" class="button right" onclick="this.form.submit()">save</button>
+							<button type="button" class="button right" onclick="indicate(6);this.form.submit();loadSettings();">save</button>
 						</div>
 					</form>
 				</page-container>
@@ -339,25 +345,24 @@
 				</page-container>
 			</page>
 		</container>
-		<iframe name="data-frame" id="data-frame"></iframe>
-	<footer>
-		<div class=footer>
-			<ul>
-				<li>
-					<a href=https://github.com/spacehuhn/wifi_ducky?wi-pwn= target=blank_ style=color:#fff;font-weight:400><b>Wi-Fi Ducky</b> &copy; 2017 Spacehuhn</a>
-				</li>
-				<li>
-					<a href=https://github.com/spacehuhn/wifi_ducky target=blank_>GitHub</a>
-				</li>
-				<li>
-					<a href=https://github.com/spacehuhn/wifi_ducky/wiki target=blank_>Wiki</a>
-				</li>
-			</ul>
-		</div>
-		<a href=https://samdenty99.github.io/about?wifi_ducky target=blank_ class=sub-section-attribution>Designed by Sam Denty - @samdenty99</a>
-	</footer>
+		<footer>
+			<div class="footer">
+				<ul>
+					<li>
+						<a href="https://github.com/spacehuhn/wifi_ducky" target="blank_" style="color:#fff;font-weight:400"><b>Wi-Fi Ducky</b> &copy; 2017 Spacehuhn</a>
+					</li>
+					<li>
+						<a href="https://github.com/spacehuhn/wifi_ducky" target="blank_">GitHub</a>
+					</li>
+					<li>
+						<a href="https://github.com/spacehuhn/wifi_ducky/wiki" target="blank_">Wiki</a>
+					</li>
+				</ul>
+			</div>
+			<a href="https://samdenty99.github.io/about?wifi_ducky" target="blank_" class="sub-section-attribution">Designed by Sam Denty - @samdenty99</a>
+		</footer>
 	</main>
+	<script src="main.js"></script>
+	<iframe name="data-frame" id="data-frame" onload="var df=this.contentWindow.document.body.innerHTML;if (df) if(df.includes('true')) {indicate(true)} else {indicate(false)}"></iframe>
 </body>
-<script src="main.js"></script>
-
 </html>

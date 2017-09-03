@@ -185,13 +185,13 @@ var version = "9.0",
 		});
 	}
 	
-	function run(i){
+	function run(i) {
 		getResponse("run?name="+res.list[i].n,function(responseText){
 			console.log(responseText);
 		},undefined,undefined,"POST");
 	}
 	
-	function format(){
+	function format() {
 		getResponse("format",function(responseText){
 			loadlist();
 		});
@@ -204,7 +204,7 @@ var version = "9.0",
 		document.getElementById("charCount").innerHTML = document.getElementById("scriptTextArea").value.length;
 	}
 
-	function run(){
+	function liveRun() {
 		var script = document.getElementById("scriptTextArea").value.replace(/\n\r?/g, '%0D');
 		getResponse("run?script="+script,function(responseText){
 			if(responseText == "true") notify("Executing Script...",2500);
@@ -233,7 +233,7 @@ var version = "9.0",
 		document.getElementById(e).setAttribute('checked','checked');
 	}
 	
-	function loadSettings(){
+	function loadSettings() {
 		getResponse("settings.json",function(responseText){
 			var res = JSON.parse(responseText);
 			
@@ -246,6 +246,8 @@ var version = "9.0",
 			if(res.syntax) {
 				setChecked("syntax");
 				document.getElementsByTagName("body")[0].classList.add("highlight");
+			} else {
+				document.getElementsByTagName("body")[0].classList.remove("highlight");
 			}
 			if(res.autoExec) setChecked("autoExec");
 			switchEXEC()
@@ -364,7 +366,9 @@ var version = "9.0",
 			api.output = output;
 			api.update = function(){
 				var input = textarea.value;
-				var position = textarea.selectionStart;
+				var changecursor = false;
+				var oldInput = input;
+				var position = textarea.selectionEnd;
 				if(input.match(/^\S+/gm)){
 					input = input.replace(/^\S+/gm,function(letter){return letter.toUpperCase()});
 				}
@@ -375,37 +379,67 @@ var version = "9.0",
 					input = input.replace(/(^|,)WINDOWS/gm, "GUI");
 					position = position - 4;
 				}
+				if (input.match(/(^|,)RUN/gm)) {
+					input = input.replace(/(^|,)RUN/gm, "GUI R");
+					position = position + 2;
+				}
+				if (input.match(/(^|,)SLEEP/gm)) {
+					input = input.replace(/(^|,)SLEEP/gm, "DELAY");
+				}
 				if (input.match(/(^|,)RETURN/gm)) {
 					input = input.replace(/(^|,)RETURN/gm, "ENTER");
 					position = position - 1;
 				}
 				if (input.match(/(^|,)1/gm)) {
 					input = input.replace(/(^|,)1/gm, "STRING ");
+					changecursor = true;
 					position = position + 6;
 				}
 				if (input.match(/(^|,)2/gm)) {
 					input = input.replace(/(^|,)2/gm, "DELAY ");
+					changecursor = true;
 					position = position + 5;
 				}
 				if (input.match(/(^|,)3/gm)) {
 					input = input.replace(/(^|,)3/gm, "REPLAY ");
+					changecursor = true;
 					position = position + 6;
 				}
 				if (input.match(/(^|,)4/gm)) {
 					input = input.replace(/(^|,)4/gm, "GUI ");
+					changecursor = true;
 					position = position + 3;
 				}
 				if (input.match(/(^|,)5/gm)) {
-					input = input.replace(/(^|,)5/gm, "REM ");
-					position = position + 3;
+					input = input.replace(/(^|,)5/gm, "ENTER\n");
+					changecursor = true;
+					position = position + 5;
 				}
 				if (input.match(/(^|,)6/gm)) {
-					input = input.replace(/(^|,)6/gm, "TAB ");
+					input = input.replace(/(^|,)6/gm, "TAB\n");
+					changecursor = true;
 					position = position + 3;
 				}
-				// Capture cursor position (prevents the cursor from jumping to end after every key press)
-				textarea.value = input;
-				textarea.selectionEnd = position;
+				if (input.match(/(^|,)7/gm)) {
+					input = input.replace(/(^|,)7/gm, "REM ");
+					changecursor = true;
+					position = position + 3;
+				}
+				if (input != oldInput) {
+					// Capture cursor position (prevents the cursor from jumping to end after every key press)
+					textarea.value = input;
+					var ua = navigator.userAgent.toLowerCase();
+					var isAndroid = ua.indexOf("android") > -1;
+					if(isAndroid && changecursor) {
+						setTimeout(function(){textarea.selectionStart = position;textarea.selectionEnd = position},0)
+					} else if (isAndroid && position == input.length) {
+						// If Android and at the end of the line
+						textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
+					} else {
+						// Set cursor position on normal browsers
+						textarea.selectionEnd = position
+					}
+				}
 				if( input ){
 					color( input, output, parser );
 					// determine the best size for the textarea
@@ -470,6 +504,22 @@ var version = "9.0",
 			// start the highlighter
 			decorator = new TextareaDecorator( textarea, parser );
 		};
+		function indicate(indState) {
+		  if (indState == null) {
+			saveStatus.classList.remove("show-loading");
+			setTimeout(function() {saveStatus.className = ""}, 500)
+		  } else if (indState == 6) {
+		  	saveStatus.classList.add("show-loading");
+		  } else if (indState == true) {
+			saveStatus.classList.add("show-loading");
+			saveStatus.classList.add("success-save");
+			setTimeout(function(){indicate()}, 2500);
+		  } else if (indState == false){
+			saveStatus.classList.add("show-loading");
+			saveStatus.classList.add("failed-save");
+			setTimeout(function(){indicate()}, 2500);
+		  }
+		}
 
 
 // Execute on page load

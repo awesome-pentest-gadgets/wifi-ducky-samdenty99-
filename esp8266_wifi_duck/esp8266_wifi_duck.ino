@@ -112,6 +112,7 @@ void setup() {
 
   server.on("/main.css", HTTP_GET, [](AsyncWebServerRequest *request) {
 	  AsyncWebServerResponse *response = request->beginResponse_P(200, "text/css", data_mainCSS, sizeof(data_mainCSS));
+   response->addHeader("Cache-Control","max-age=10");
 	  request->send(response);
   });
 
