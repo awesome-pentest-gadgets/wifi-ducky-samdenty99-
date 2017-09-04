@@ -77,7 +77,9 @@
 						<div class="card">
 							<div class="card-content">
 								<div class="form-group">
-									<textarea id="scriptTextArea" name="script" maxlength="1024" onkeyup="count()" onkeydown="count()" onchange="count()" required="required" onfocus="document.getElementsByTagName('body')[0].classList.add('hide-nav')" onblur="document.getElementsByTagName('body')[0].classList.remove('hide-nav')" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="off">STRING quack</textarea>
+									<textarea id="scriptTextArea" name="script" maxlength="1024" onkeyup="count()" onkeydown="count()" onchange="count()" required="required" onfocus="document.getElementsByTagName('body')[0].classList.add('hide-nav')" onblur="document.getElementsByTagName('body')[0].classList.remove('hide-nav')" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="off">
+DELAY 400
+STRING Quack! Quack</textarea>
 								</div>
 							</div>
 							<div class="card-action">
@@ -195,9 +197,51 @@
 									<td>Page down key</td>
 								</tr>
 							</table>
-							<br><br>
+							<div class="card-action">
+								<a href="https://github.com/hak5darren/USB-Rubber-Ducky/wiki/Duckyscript" class="button right" target="blank_">Official documentation</a>
+							</div>
+						</div>
+					</div>
+					<div class="card-container">
+						<div class="settingsHeader">Script macros</div>
+						<div class="card">
 							<div class="card-content">
-								There are also command shortcuts available, typing a number from 1-8 on a newline will be replaced with the corresponding command.
+								Instead of manually typing multiple commands again and again, you can instead use the included macros. Simply create a new line and type the <i>shortcut</i>, the text will be instantly replaced with the appropriate ducky script.
+							</div>
+							<table>
+								<tr>
+									<th>Shortcut</th>
+									<th>OS</th>
+									<th>Command</th>
+								</tr>
+								<tr>
+									<td>RUN</td>
+									<td><b>WINDOWS</b></td>
+									<td>Launches the Run dialog and starts a program</td>
+								</tr>
+								<tr>
+									<td>CMD</td>
+									<td><b>WINDOWS</b></td>
+									<td>Opens a new command prompt window and execute a command</td>
+								</tr>
+								<tr>
+									<td>HCMD</td>
+									<td><b>WINDOWS</b></td>
+									<td>Hide the command prompt window and execute a command</td>
+								</tr>
+								<tr>
+									<td>DOWNLOAD</td>
+									<td><b>WINDOWS</b></td>
+									<td>Download a file and execute it remotely</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="card-container">
+						<div class="settingsHeader">Command shortcuts</div>
+						<div class="card">
+							<div class="card-content">
+								There are command shortcuts available, typing a number from 1-8 on a newline will be replaced with its corresponding command.
 							</div>
 							<table>
 								<tr>
@@ -237,9 +281,6 @@
 									<td>RUN</td>
 								</tr>
 							</table>
-							<div class="card-action">
-								<a href="https://github.com/hak5darren/USB-Rubber-Ducky/wiki/Duckyscript" class="button right" target="blank_">Official documentation</a>
-							</div>
 						</div>
 					</div>
 				</page-container>

